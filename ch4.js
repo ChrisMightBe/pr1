@@ -64,3 +64,51 @@ function reverseArrayInPlace(arr){
 }
 
 console.log(reverseArrayInPlace([1, 2, 3])); // [3, 2, 1]
+
+
+arrayToList = function(arr){
+    let list = null;
+    for(let i = arr.length - 1; i >= 0; i--)
+    {
+        list = {value: arr[i], rest: list};
+    }
+    return list;
+}
+
+console.log(arrayToList([1, 2, 3])); // {value: 1, rest: {value: 2, rest: {value: 3, rest: null}}}
+
+function listToArray(list){
+    let arr = [];
+    for(let node = list; node; node = node.rest)
+    {
+        arr.push(node.value);
+    }
+    return arr;
+}
+
+console.log(listToArray(arrayToList([1, 2, 3]))); // [1, 2, 3]
+
+function deepEqual(a, b) {
+    if (a === b) {
+        return true; // Same reference or primitive value
+    }
+    if (typeof a !== "object" || a === null || typeof b !== "object" || b === null) {
+        return false; // One is not an object or both are null
+    }
+    let keysA = Object.keys(a);
+    let keysB = Object.keys(b);
+    if (keysA.length !== keysB.length) {
+        return false; // Different number of properties
+    }
+    for (let key of keysA) {
+        if (!keysB.includes(key) || !deepEqual(a[key], b[key])) {
+            return false; // Property mismatch or values not equal
+        }
+    }
+    return true; // All properties match
+}
+
+console.log(deepEqual({a: 1, b: 2}, {a: 1, b: 2})); // true
+console.log(deepEqual({a: 1, b: 2}, {a: 1, b: 3})); // false
+
+
