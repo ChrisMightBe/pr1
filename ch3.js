@@ -1,20 +1,50 @@
-let size = 9; // Size of the chessboard
-let board = "";
+function min(a, b){
+    if(a<b){
+        return a;
+    }
+    else{
+        return b;
+    }
+};
 
-for(let i = 0; i < size; i++) 
-{
-    for(let j = 0; j < size; j++)
+console.log(min(10, 20)); // 10
+console.log(min(20, 10)); // 10
+
+
+function isEven(n) {
+    if(n<0)
     {
-        if((i + j) % 2 == 0)
+        n = -n;
+        return isEven(n)
+    }
+    if(n == 0)
+    {
+        return true;
+    }
+    else if(n == 1)
+    {
+        return false;
+    }
+    else
+    {
+        return isEven(n-2);
+    }
+}
+console.log(isEven(50)); // true
+console.log(isEven(75)); // false
+
+function countBs(str){
+    let count = 0;
+    for(let i = 0; i<str.length; i++)
+    {
+        if(str[i] == "B")
         {
-            board = board + " "; // Use space for white squares
-        }
-        else
-        {
-            board = board + "#"; // Use hash for black squares
+            count++;
         }
     }
-    board = board + "\n"; // New line after each row
+    return count;
 }
 
-console.log(board); // Print the chessboard
+console.log(countBs("BBC")); // 2
+console.log(countBs("kBckB")); // 2
+
