@@ -153,6 +153,6 @@ function compareRobots(robot1, memory1, robot2, memory2){
 }
 
 let ans = (compareRobots(routeRobot, [], goalOrientedRobot, []));
-console.log(`Average for routeRobot: ${ans[0]} turns, and ${ans[1]} turns for goalOrientedRobot`);
+console.log(`Average for routeRobot is ${ans[0]} turns, and ${ans[1]} turns for goalOrientedRobot`);
 
 
