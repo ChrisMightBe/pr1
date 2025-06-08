@@ -155,4 +155,22 @@ function compareRobots(robot1, memory1, robot2, memory2){
 let ans = (compareRobots(routeRobot, [], goalOrientedRobot, []));
 console.log(`Average for routeRobot is ${ans[0]} turns, and ${ans[1]} turns for goalOrientedRobot`);
 
+function myRobot({place, parcels}, route){
+    if(route.length === 0){
+        let routes = parcels.map(parcel => {
+            if(parcel.place !== place){
+                return {route: findRoute(roadGraph, place, parcel.place), pickUp: true, parcel};
+            }
+            else{
+                return {route: findRoute(roadGraph, place, parcel.address), pickUp: false, parcel};
+            }
+        });
 
+        let best = routes.reduce((a, b) => a.route.length < b.route.length ? a : b);
+        route = best.route;
+    }
+return{direction: route[0], memory: route.slice(1)};
+}
+
+let asn2 = compareRobots(myRobot, [], goalOrientedRobot, []);
+console.log(`Average for myRobot is ${asn2[0]} turns, and ${asn2[1]} turns for goalOrientedRobot`);
