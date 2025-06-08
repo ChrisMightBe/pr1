@@ -82,5 +82,77 @@ function randomRobot(state) {
     return {direction: randomPick(roadGraph[state.place])};
 }
 
-runRobot(VillageState.random(), randomRobot);
+//runRobot(VillageState.random(), randomRobot);
+
+const mailRoute = [
+    "Alice's House", "Cabin", "Alice's House", "Bob's House",
+  "Town Hall", "Daria's House", "Ernie's House",
+  "Grete's House", "Shop", "Grete's House", "Farm",
+  "Marketplace", "Post Office"
+];
+
+function routeRobot(state, memory){
+    if(memory.length == 0){
+        memory = mailRoute;
+    }
+    return {direction: memory[0], memory: memory.slice(1)};
+}
+
+//runRobot(VillageState.random(), routeRobot, []);
+
+function findRoute(graph, from, to){
+    let work = [{at: from, route: []}];
+    for(let i = 0; i<work.length; i++){
+        let {at, route} = work[i];
+        for(let place of graph[at]){
+            if(place == to) return route.concat(place);
+            if(!work.some(w=> w.at == place)){
+                work.push({at:place, route:route.concat(place)});
+            }
+        }
+    }
+}
+
+function goalOrientedRobot({place, parcels}, route){
+    if (route.length == 0){
+        let parcel = parcels[0];
+        if(parcel.place != place){
+            route = findRoute(roadGraph, place, parcel.place);
+        }else{
+            route = findRoute(roadGraph, place, parcel.address);
+        }
+    }
+    return {direction:route[0], memory: route.slice(1)};
+}
+
+//runRobot(VillageState.random(), goalOrientedRobot, []);
+
+function runCompare(state, robot, memory){
+    for(let turn = 0;; turn++){
+        if(state.parcels.length == 0){
+            return turn;
+            break;
+        }
+        let action = robot(state, memory);
+        state = state.move(action.direction);
+        memory = action.memory;
+    }
+}
+
+
+function compareRobots(robot1, memory1, robot2, memory2){
+    let state = VillageState.random();
+    let turns1 = 0;
+    let turns2 = 0;
+    for(let i = 0; i < 100; i++){
+        turns1 += runCompare(state, robot1, memory1);
+        turns2 += runCompare(state, robot2, memory2);
+    }
+    return [turns1 / 100, turns2 / 100];
+    
+}
+
+let ans = (compareRobots(routeRobot, [], goalOrientedRobot, []));
+console.log(`Average for routeRobot: ${ans[0]} turns, and ${ans[1]} turns for goalOrientedRobot`);
+
 
