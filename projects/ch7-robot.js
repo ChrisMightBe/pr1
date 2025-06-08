@@ -174,3 +174,36 @@ return{direction: route[0], memory: route.slice(1)};
 
 let asn2 = compareRobots(myRobot, [], goalOrientedRobot, []);
 console.log(`Average for myRobot is ${asn2[0]} turns, and ${asn2[1]} turns for goalOrientedRobot`);
+
+class PGroup{
+    constructor(elements) {
+        this.elements = elements;
+    }
+
+    add(value) {
+        if (this.has(value)) return this;
+        return new PGroup([...this.elements, value]);
+    }
+
+    delete(value) {
+        if (!this.has(value)) return this;
+        return new PGroup(this.elements.filter(e => e !== value));
+    }
+
+    has(value) {
+        return this.elements.includes(value);
+    }
+
+    static empty = new PGroup([]);
+}
+
+let a = PGroup.empty.add("a");
+let ab = a.add("b");
+let b = ab.delete("a");
+
+console.log(b.has("b"));
+// → true
+console.log(a.has("b"));
+// → false
+console.log(b.has("a"));
+// → false
